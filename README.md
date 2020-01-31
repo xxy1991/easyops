@@ -10,3 +10,8 @@ source <DIR>/bin/activate
 ```
 pip install -r requirements.txt
 ```
+
+## Install develops dependencies
+```
+pip install -r dev-requirements.txt
+```
