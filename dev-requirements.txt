@@ -1,2 +1,5 @@
 requests
 invoke
+
+autopep8
+pylint
