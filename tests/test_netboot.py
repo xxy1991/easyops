@@ -9,7 +9,7 @@
 import unittest
 
 import json
-from netboot import get_default, get_by_name, get_by_area
+from netboot import get_default, get_by_name, get_by_area,get_sources
 
 
 class TestNetBoot(unittest.TestCase):
@@ -30,3 +30,8 @@ class TestNetBoot(unittest.TestCase):
     def test_get_by_area(self) -> None:
         src_cfg = get_by_area(self.src_list, 'debian', 'hk')
         self.assertEqual(src_cfg['addr'], 'mirror.xtom.com.hk')
+
+    def test_get_sources(self) -> None:
+        get_sources()
+        # src_cfg = get_by_area(self.src_list, 'debian', 'hk')
+        # self.assertEqual(src_cfg['addr'], 'mirror.xtom.com.hk')

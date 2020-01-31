@@ -53,6 +53,8 @@ def get_sources(os=None, name=None, area=None):
     uri = CFG_URI + '/sources.json'
     src_list = json.loads(requests.get(uri).text)
 
+    run('sh ./scripts/netboot.sh test')
+
     # os = name.split('.')[0]
     # name = name.split('.')[1]
     # json2 = json2[os]
