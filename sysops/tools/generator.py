@@ -123,22 +123,3 @@ if __name__ == '__main__':
     invoke.run('cp ' + cert_live_path + '/cfg.ori.fyi/privkey.pem ' + cert_path + '/cfg-ori-fyi.key')
     invoke.run('cp ../docker/sysops/nginx/cfg-ori-fyi-ssl.conf ' + CFG_WEB_PATH)
     invoke.run('cp ../docker/sysops/nginx/nginx.Dockerfile ' + CFG_WEB_PATH)
-
-    HUB_REGISTRY_USER = 'xxy1991'
-    HUB_REGISTRY_PASSWORD = 'yC55o5kJo3V2R63L'
-    HUB_REGISTRY_IMAGE = 'xxy1991/cfgweb'
-
-    ALY_REGISTRY = 'registry.cn-hongkong.aliyuncs.com'
-    ALY_REGISTRY_USER = 'xiaxy1991@qq.com'
-    ALY_REGISTRY_PASSWORD = 'AlyReg123!@#'
-    ALY_REGISTRY_IMAGE = ALY_REGISTRY + '/starorigin/cfgweb'
-
-    # sudo(invoke, CFG_WEB_PATH, 'docker build -t ' + HUB_REGISTRY_IMAGE + ':nginx . -f nginx.Dockerfile')
-    # Docker.login(invoke, HUB_REGISTRY_USER, HUB_REGISTRY_PASSWORD)
-    # invoke.sudo('docker push ' + HUB_REGISTRY_IMAGE + ':nginx')
-
-    sudo(invoke, CFG_WEB_PATH, 'docker build --no-cache -t ' + ALY_REGISTRY_IMAGE + ':nginx . -f nginx.Dockerfile')
-    Docker.login(invoke, ALY_REGISTRY_USER, ALY_REGISTRY_PASSWORD, ALY_REGISTRY)
-    invoke.sudo('docker push ' + ALY_REGISTRY_IMAGE + ':nginx')
-
-    invoke.run('cp ../configs/invoke.yml ../sysops-fabric2/fabric.yml')
