@@ -14,7 +14,7 @@ from netboot import get_default, get_by_name, get_by_area
 
 class TestNetBoot(unittest.TestCase):
     def setUp(self) -> None:
-        with open('../sources.json', 'r') as f:
+        with open('./sources.json', 'r') as f:
             self.src_list = json.load(f)
 
     def test_get_default(self) -> None:
