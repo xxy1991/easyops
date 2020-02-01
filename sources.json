@@ -34,5 +34,20 @@
       "addr": "mirror.sg.gs",
       "area-default": true
     }
+  ],
+  "debian": [
+    {
+      "name": "auto",
+      "addr": "deb.debian.org",
+      "default": true
+    }
+  ],
+  "ubuntu": [
+    {
+      "name": "auto",
+      "scheme": "mirror",
+      "addr": "mirrors.ubuntu.com/mirrors.txt",
+      "default": true
+    }
   ]
 }

@@ -7,6 +7,8 @@
 """
 
 import sys
+import argparse
+import string
 import json
 
 import requests
@@ -45,7 +47,7 @@ def get_by_name(src_list, name):
 def get_by_area(src_list, os, area):
     if os in src_list:
         for src in src_list[os]:
-            if src['area'] == area and \
+            if 'area' in src and src['area'] == area and \
                 ('area-default' in src and src['area-default']):
                 return src
     else:
@@ -78,6 +80,15 @@ def netboot_grub(os):
         grub_cfg = Ubuntu.gen_grub()
     write_text('grub-msdos.cfg', grub_cfg)
     run('scripts/netboot.sh netboot_grub')
+
+
+def get_args(args):
+    parser = argparse.ArgumentParser(description='Linux netboot installer.')
+    parser.add_argument('os', choices=['debian', 'ubuntu'], help='os name that install')
+    parser.add_argument('-H', help='Hostname')
+    parser.add_argument('-m', '--manual', action="store_true", help='manual mode')
+
+    return parser.parse_args(args)
 
 
 def main():

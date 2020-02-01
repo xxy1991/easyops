@@ -20,4 +20,4 @@ class TestConfig(unittest.TestCase):
         config = self.config
         for key in config.hosts:
             host = config.hosts[key]
-            print(host)
+            # print(host)

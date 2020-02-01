@@ -6,24 +6,22 @@ sudo:
 Hosts:
   default:
     port: 22
-    domain: ori.fyi
-    mirror: xtom
-    username: xxy
-    fullname: Xia Xinyu
+    domain: lesscode.dev
+    mirror: auto
+    username: test
+    fullname: Test
     users:
       root:
-        key: root_rsa_2048
+        key: test_rsa_2048
         password: Test123!
-      xxy:
-        key: xxy_rsa_2048
+      test:
+        key: test_rsa_2048
         password: Test123!
   dsstd:
     os: debian
-    mirror: auto
     host: dsstd
   ubstd:
     os: ubuntu
-    mirror: auto
     host: ubstd
   hk01:
     os: debian
