@@ -12,6 +12,9 @@ import json
 import requests
 from invoke import run
 
+from easyops.util import write_text
+from easyops.linux import Debian, Ubuntu
+
 CFG_URI = 'https://cfg.ori.fyi'
 
 
@@ -43,7 +46,7 @@ def get_by_area(src_list, os, area):
     if os in src_list:
         for src in src_list[os]:
             if src['area'] == area and \
-                    ('area-default' in src and src['area-default']):
+                ('area-default' in src and src['area-default']):
                 return src
     else:
         return get_by_area(src_list, 'common', area)
@@ -66,6 +69,15 @@ def netboot_download(os, ver_code):
           + '/main/installer-amd64/current/images/netboot/' + file_name + '"'
     run(cmd)
     run('tar -zxf ' + file_name)
+
+
+def netboot_grub(os):
+    if os == 'debian':
+        grub_cfg = Debian.gen_grub()
+    if os == 'ubuntu':
+        grub_cfg = Ubuntu.gen_grub()
+    write_text('grub-msdos.cfg', grub_cfg)
+    run('scripts/netboot.sh netboot_grub')
 
 
 def main():

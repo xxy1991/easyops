@@ -19,7 +19,6 @@ def _config_merge(default, host):
 
 
 class Host:
-
     def __init__(self, config):
         """Constructor"""
         self._data = {}
@@ -103,15 +102,15 @@ def singleton(cls):
 
 @singleton
 class Config(object):
-
-    def __init__(self, ctx=None):
+    def __init__(self, ctx=None, path=None):
         self._hosts = {}
         if ctx is None:
-            cfg = InvCfg(project_location='../configs')
-            cfg.load_project()
-            # cfg = InvCfg(runtime_path='../configs/invoke.yml')
-            # cfg.load_runtime()
-            self._context = InvCtx(cfg)
+            # cfg = InvCfg(project_location='../configs')
+            # cfg.load_project()
+            if path is not None:
+                cfg = InvCfg(runtime_path=path)
+                cfg.load_runtime()
+                self._context = InvCtx(cfg)
         else:
             self._context = ctx
 

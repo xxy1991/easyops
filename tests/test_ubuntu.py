@@ -8,17 +8,17 @@
 
 import unittest
 
-from easyops.linux import Debian
+from easyops.linux import Ubuntu
 
 
-class TestDebian(unittest.TestCase):
+class TestUbuntu(unittest.TestCase):
     def setUp(self) -> None:
         # with open('./sources.json', 'r') as f:
         #     self.src_list = json.load(f)
         pass
 
     def test_gen_grub(self) -> None:
-        config = Debian.gen_grub()
-        with open('tests/debian/grub-msdos.cfg', 'r') as f:
+        config = Ubuntu.gen_grub()
+        with open('tests/ubuntu/grub-msdos.cfg', 'r') as f:
             example = f.read()
         self.assertEqual(config, example)

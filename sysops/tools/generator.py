@@ -73,7 +73,7 @@ def gen_preseed():
 
 
 def gen_grub():
-    src_path = path_join(CONF_PRESEED_PATH, "msdos.grub.j2")
+    src_path = path_join(CONF_PRESEED_PATH, "grub-msdos.cfg.j2")
     cfg_src = read_text(src_path)
 
     cfg_dst = Template(cfg_src).render(os="debian")
