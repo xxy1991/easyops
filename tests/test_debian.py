@@ -21,4 +21,4 @@ class TestDebian(unittest.TestCase):
         config = Debian.gen_grub()
         with open('tests/debian/grub-msdos.cfg', 'r') as f:
             example = f.read()
-        self.assertEqual(config, example)
+        self.assertEqual(example, config)

@@ -8,7 +8,6 @@
 
 import sys
 import argparse
-import string
 import json
 
 import requests
@@ -31,29 +30,6 @@ def get_sources2(os=None, name=None, area=None):
     json2 = json2[os]
 
 
-def get_default(src_list):
-    for src in src_list['common']:
-        if 'default' in src and src['default']:
-            return src
-
-
-def get_by_name(src_list, name):
-    for os in src_list:
-        for src in src_list[os]:
-            if src['name'] == name:
-                return src
-
-
-def get_by_area(src_list, os, area):
-    if os in src_list:
-        for src in src_list[os]:
-            if 'area' in src and src['area'] == area and \
-                ('area-default' in src and src['area-default']):
-                return src
-    else:
-        return get_by_area(src_list, 'common', area)
-
-
 def get_sources(os=None, name=None, area=None):
     uri = CFG_URI + '/sources.json'
     src_list = json.loads(requests.get(uri).text)
@@ -74,12 +50,21 @@ def netboot_download(os, ver_code):
 
 
 def netboot_grub(os):
+    grub_cfg = None
     if os == 'debian':
         grub_cfg = Debian.gen_grub()
-    if os == 'ubuntu':
+    elif os == 'ubuntu':
         grub_cfg = Ubuntu.gen_grub()
-    write_text('grub-msdos.cfg', grub_cfg)
-    run('scripts/netboot.sh netboot_grub')
+    if grub_cfg is not None:
+        write_text('grub-msdos.cfg', grub_cfg)
+        run('scripts/netboot.sh netboot_grub')
+
+
+def get_config(config, os, host=None):
+    if host is not None and host in config.hosts:
+        return config.hosts[host]
+    elif os in config.hosts:
+        return config.hosts[os]
 
 
 def get_args(args):
@@ -92,13 +77,6 @@ def get_args(args):
 
 
 def main():
-    print('arg num : ', len(sys.argv))
-    print('args : ', sys.argv)
-    print('script name : ', sys.argv[0])
-
-    for i in range(len(sys.argv)):
-        print("arg[{0}] = {1}".format(i, sys.argv[i]))
-
     get_sources()
 
 

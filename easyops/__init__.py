@@ -10,7 +10,7 @@
 from os.path import join as path_join
 from os.path import sep as path_sep
 
-from .config.manager import Config, Host
+from .config import Config, Host
 
 CONF_PATH = path_join("..", "configs")
 CONF_APT_PATH = path_join(CONF_PATH, "apt")

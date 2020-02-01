@@ -17,10 +17,10 @@ Hosts:
       test:
         key: test_rsa_2048
         password: Test123!
-  dsstd:
+  debian:
     os: debian
     host: dsstd
-  ubstd:
+  ubuntu:
     os: ubuntu
     host: ubstd
   hk01:

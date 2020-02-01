@@ -2,43 +2,43 @@
   "common": [
     {
       "name": "163",
-      "area": "cn",
-      "addr": "mirrors.163.com"
+      "location": "cn",
+      "host": "mirrors.163.com"
     },
     {
       "name": "ustc",
-      "area": "cn",
-      "addr": "mirrors.ustc.edu.cn",
-      "area-default": true,
+      "location": "cn",
+      "location-default": true,
+      "host": "mirrors.ustc.edu.cn",
       "default": true
     },
     {
       "name": "aly",
-      "area": "cn",
-      "addr": "mirrors.aliyun.com"
+      "location": "cn",
+      "host": "mirrors.aliyun.com"
     },
     {
       "name": "aly-vpc",
-      "area": "sp",
-      "addr": "mirrors.cloud.aliyuncs.com"
+      "location": "sp",
+      "host": "mirrors.cloud.aliyuncs.com"
     },
     {
       "name": "xtom",
-      "area": "hk",
-      "addr": "mirror.xtom.com.hk",
-      "area-default": true
+      "location": "hk",
+      "location-default": true,
+      "host": "mirror.xtom.com.hk"
     },
     {
       "name": "sggs",
-      "area": "sg",
-      "addr": "mirror.sg.gs",
-      "area-default": true
+      "location": "sg",
+      "location-default": true,
+      "host": "mirror.sg.gs"
     }
   ],
   "debian": [
     {
       "name": "auto",
-      "addr": "deb.debian.org",
+      "host": "deb.debian.org",
       "default": true
     }
   ],
@@ -46,7 +46,7 @@
     {
       "name": "auto",
       "scheme": "mirror",
-      "addr": "mirrors.ubuntu.com/mirrors.txt",
+      "host": "mirrors.ubuntu.com/mirrors.txt",
       "default": true
     }
   ]

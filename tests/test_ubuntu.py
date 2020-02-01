@@ -21,4 +21,4 @@ class TestUbuntu(unittest.TestCase):
         config = Ubuntu.gen_grub()
         with open('tests/ubuntu/grub-msdos.cfg', 'r') as f:
             example = f.read()
-        self.assertEqual(config, example)
+        self.assertEqual(example, config)

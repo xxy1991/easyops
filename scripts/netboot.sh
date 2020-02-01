@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # created by xxy1991
 
+BASE_URI='main/installer-amd64/current/images/netboot'
+NETBOOTFILE='netboot.tar.gz'
+
 GRUB40='/etc/grub.d/40_custom'
 DGRUB='/etc/default/grub'
 
-# netboot_download(str os, str version)
+# netboot_download(str mirror, str os, str ver_code)
 netboot_download() {
     wget -Nq "${MIRROR}/${1}/dists/${2}/${BASE_URI}/${NETBOOTFILE}"
-    tar -zxf ${NETBOOTFILE}
+    tar -zxf "${NETBOOTFILE}"
 }
 
 # netboot_grub()
