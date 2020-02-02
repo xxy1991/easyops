@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from functools import wraps
 
 from invoke import Config as InvCfg, Context as InvCtx
 
+from ..util import singleton
 from .host import Host
 
 
@@ -20,47 +20,39 @@ def _config_merge(default, host):
     return default
 
 
-def singleton(cls):
-    _instances = {}
-
-    @wraps(cls)
-    def _singleton(*args, **kwargs):
-        if cls not in _instances:
-            _instances[cls] = cls(*args, **kwargs)
-        return _instances[cls]
-
-    return _singleton
-
-
 @singleton
 class Config(object):
     def __init__(self, ctx=None, path=None):
-        self._hosts = {}
         if ctx is None:
             # cfg = InvCfg(project_location='../configs')
             # cfg.load_project()
             if path is not None:
                 cfg = InvCfg(runtime_path=path)
                 cfg.load_runtime()
-                self._context = InvCtx(cfg)
+                self.__context = InvCtx(cfg)
+            else:
+                self.__context = InvCtx()
         else:
-            self._context = ctx
+            self.__context = ctx
 
-        hosts = self.config.Hosts
-        default = hosts['default']
-        for key in hosts:
-            if key == 'default':
-                continue
-            host = Host(_config_merge(dict(default), dict(hosts[key])))
-            self._hosts[key] = host
+        self.__hosts = {}
+        if 'Hosts' in self.config:
+            hosts = self.config.Hosts
+            default = hosts['default']
+
+            for key in hosts:
+                if key == 'default':
+                    continue
+                host = Host(_config_merge(dict(default), dict(hosts[key])))
+                self.__hosts[key] = host
 
     @property
     def hosts(self):
-        return self._hosts
+        return self.__hosts
 
     @property
     def context(self):
-        return self._context
+        return self.__context
 
     @property
     def config(self):

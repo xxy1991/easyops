@@ -45,7 +45,9 @@
   "ubuntu": [
     {
       "name": "auto",
-      "scheme": "mirror",
+      "scheme": [
+        "mirror"
+      ],
       "host": "mirrors.ubuntu.com/mirrors.txt",
       "default": true
     }

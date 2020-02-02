@@ -6,9 +6,22 @@
 @Email   : xxy1991@gmail.com
 """
 
-
+from functools import wraps
 from os import makedirs
 from os.path import dirname, exists, isfile
+
+
+def singleton(cls):
+    _instances = {}
+
+    @wraps(cls)
+    def _singleton(*args, **kwargs):
+        key = repr(cls) + repr(frozenset(kwargs.items()))
+        if key not in _instances:
+            _instances[key] = cls(*args, **kwargs)
+        return _instances[key]
+
+    return _singleton
 
 
 def sudo(ctx, path, command):

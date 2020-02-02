@@ -13,40 +13,47 @@ import json
 import requests
 from invoke import run
 
+from easyops import Config
 from easyops.util import write_text
-from easyops.linux import Debian, Ubuntu
+from easyops.linux import Debian, Ubuntu, apt2
 
 CFG_URI = 'https://cfg.ori.fyi'
 
 
-def get_sources2(os=None, name=None, area=None):
-    uri = CFG_URI + '/sources.json'
-    json_text = requests.get(uri).text
-    json2 = json.loads(json_text)
-    print(json2)
+class Netboot(object):
+    def __init__(self, os, host):
+        self.os = os
+        self.host = host
 
-    os = name.split('.')[0]
-    name = name.split('.')[1]
-    json2 = json2[os]
+        self.config = Config(path='invoke.yml')
 
+        uri = CFG_URI + '/sources.json'
+        json_text = requests.get(uri).text
+        self.src_list = json.loads(json_text)
 
-def get_sources(os=None, name=None, area=None):
-    uri = CFG_URI + '/sources.json'
-    src_list = json.loads(requests.get(uri).text)
+    def get_config(self):
+        if self.host is not None and self.host in self.config.hosts:
+            return self.config.hosts[self.host]
+        elif self.os in self.config.hosts:
+            return self.config.hosts[self.os]
 
-    run('sh ./scripts/netboot.sh test')
+    def get_mirror(self):
+        def scheme(src):
+            return not ('scheme' in src and 'mirror' in src['scheme'])
 
-    # os = name.split('.')[0]
-    # name = name.split('.')[1]
-    # json2 = json2[os]
+        mirror = apt2.get_source(self.src_list, self.os, scheme=scheme)
+        scheme_name = 'http'
+        if 'scheme' in mirror:
+            scheme_name = mirror['scheme']
+        return scheme_name + '://' + mirror['host']
 
-
-def netboot_download(os, ver_code):
-    file_name = 'netboot.tar.gz'
-    cmd = 'wget -Nq "' + CFG_URI + '/' + os + '/dists/' + ver_code \
-          + '/main/installer-amd64/current/images/netboot/' + file_name + '"'
-    run(cmd)
-    run('tar -zxf ' + file_name)
+    def download(self, ver_code=None):
+        if ver_code is None:
+            if self.os == 'debian':
+                ver_code = Debian.VERSIONS[9]
+            elif self.os == 'ubuntu':
+                ver_code = Ubuntu.VERSIONS[18]
+        run(' '.join(['./scripts/netboot.sh', 'netboot_download', self.get_mirror(), self.os, ver_code]))
 
 
 def netboot_grub(os):
@@ -60,25 +67,18 @@ def netboot_grub(os):
         run('scripts/netboot.sh netboot_grub')
 
 
-def get_config(config, os, host=None):
-    if host is not None and host in config.hosts:
-        return config.hosts[host]
-    elif os in config.hosts:
-        return config.hosts[os]
-
-
-def get_args(args):
+def get_args(args=None):
     parser = argparse.ArgumentParser(description='Linux netboot installer.')
     parser.add_argument('os', choices=['debian', 'ubuntu'], help='os name that install')
     parser.add_argument('-H', help='Hostname')
     parser.add_argument('-m', '--manual', action="store_true", help='manual mode')
 
-    return parser.parse_args(args)
-
-
-def main():
-    get_sources()
+    if args is not None:
+        return parser.parse_args(args)
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    main()
+    options = get_args()
+    netboot = Netboot(options.os, options.H)
+    netboot.download()

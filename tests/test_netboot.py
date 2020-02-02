@@ -7,10 +7,13 @@
 """
 
 import unittest
+from unittest.mock import patch
 
 import json
+
 from easyops import Config, Host
-from netboot import get_sources, get_args, get_config
+from easyops.linux import apt2
+from netboot import get_args, Netboot
 
 
 class TestNetBoot(unittest.TestCase):
@@ -26,11 +29,22 @@ class TestNetBoot(unittest.TestCase):
         self.assertEqual('debian', args.os)
         self.assertEqual('vm-tmp-dstd', args.H)
         self.assertFalse(args.manual)
-        host = get_config(self.config, args.os, args.H)
+        netboot = Netboot(args.os, args.H)
+        # with patch.object(netboot, 'config', self.config), \
+        #      patch.object(netboot, 'src_list', self.src_list):
+        netboot.config = self.config
+        netboot.src_list = self.src_list
+        host = netboot.get_config()
         print(host.data)
+        mirror = netboot.get_mirror()
+        print(mirror)
+        # netboot.download()
+
         print(args)
 
-    def test_get_sources(self) -> None:
-        get_sources()
-        # src_cfg = get_by_area(self.src_list, 'debian', 'hk')
-        # self.assertEqual(src_cfg['addr'], 'mirror.xtom.com.hk')
+
+def test_get_sources(self) -> None:
+    # get_sources()
+    # src_cfg = get_by_area(self.src_list, 'debian', 'hk')
+    # self.assertEqual(src_cfg['addr'], 'mirror.xtom.com.hk')
+    pass

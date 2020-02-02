@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # created by xxy1991
 
+BOOT_PATH='/boot/new'
+
 BASE_URI='main/installer-amd64/current/images/netboot'
 NETBOOTFILE='netboot.tar.gz'
 
@@ -9,7 +11,11 @@ DGRUB='/etc/default/grub'
 
 # netboot_download(str mirror, str os, str ver_code)
 netboot_download() {
-    wget -Nq "${MIRROR}/${1}/dists/${2}/${BASE_URI}/${NETBOOTFILE}"
+    rm -rf "${BOOT_PATH:?}/"*
+    if [ ! -d ${BOOT_PATH} ]; then mkdir ${BOOT_PATH}; fi
+    cd "${BOOT_PATH}" || exit
+
+    wget -Nq "${1}/${2}/dists/${3}/${BASE_URI}/${NETBOOTFILE}" && \
     tar -zxf "${NETBOOTFILE}"
 }
 

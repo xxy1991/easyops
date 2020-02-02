@@ -26,3 +26,10 @@ class TestNetBoot(unittest.TestCase):
         self.assertEqual('mirrors.163.com', src_cfg['host'])
         src_cfg = apt2.get_source(self.src_list, os='debian', location='hk')
         self.assertEqual('auto', src_cfg['name'])
+
+        def scheme(src):
+            return not ('scheme' in src and 'mirror' in src['scheme'])
+
+        src_cfg = apt2.get_source(self.src_list, os='ubuntu', scheme=scheme)
+        self.assertEqual('ustc', src_cfg['name'])
+        self.assertTrue(scheme(src_cfg))

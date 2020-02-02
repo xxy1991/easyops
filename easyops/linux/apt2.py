@@ -7,6 +7,8 @@
 """
 
 
+# class
+
 def get_by_name(src_list, name, os=None):
     if os is None:
         for os2 in src_list:
@@ -24,7 +26,7 @@ def get_by_name(src_list, name, os=None):
 def get_default(src_list, os, location=None, scheme=None):
     if os in src_list:
         for src in src_list[os]:
-            if scheme is not None and 'scheme' in src and src['scheme'] != scheme:
+            if scheme is not None and not scheme(src):
                 continue
             if location is not None:
                 if 'location' in src and src['location'] != location:
@@ -33,7 +35,7 @@ def get_default(src_list, os, location=None, scheme=None):
                     return src
             if os is not None and 'default' in src and src['default']:
                 return src
-    return get_default(src_list, 'common', location)
+    return get_default(src_list, 'common', location, scheme)
 
 
 def get_source(src_list, name=None, os=None, location=None, scheme=None):
@@ -47,4 +49,4 @@ def get_source(src_list, name=None, os=None, location=None, scheme=None):
                 if src['name'] == name:
                     return src
 
-    return get_default(src_list, os, location)
+    return get_default(src_list, os, location, scheme)
