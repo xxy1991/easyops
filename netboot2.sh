@@ -5,27 +5,23 @@ CFG_URI='https://cfg.ori.fyi'
 
 # check_py3()
 check_py3() {
-  PYTHON_VER=$(python3 -V 2>&1 | awk '{print $2}')
-  if ! [[ $PYTHON_VER == 3* ]]; then
-    apt install -yqq python3
-  fi
-  PIP_VER=$(pip3 -V 2>&1 | awk '{print $2}')
-  if ! [[ $PIP_VER == 9* ]]; then
-    apt install -yqq python3-pip
-  fi
-  pip3 -q install requests invoke
-}
-
-# download_script()
-download_script() {
-  wget -Nq "${CFG_URI}/netboot.py"
+    apt -yqq update
+    PYTHON_VER=$(python3 -V 2>&1 | awk '{print $2}')
+    if ! [[ $PYTHON_VER == 3* ]]; then
+        apt install -yqq python3
+    fi
+    PIP_VER=$(pip3 -V 2>&1 | awk '{print $2}')
+    if ! [[ $PIP_VER == 9* ]]; then
+        apt install -yqq python3-pip
+    fi
+    pip3 -q install requests invoke jinja2
 }
 
 # exec_script(str agrs)
 exec_script() {
-  python3 netboot.py "$@"
+    python3 -m easyops.netboot "$@"
 }
 
 check_py3
-download_script
+pip3 install --no-deps --ignore-installed easyops-0.1.0-py2.py3-none-any.whl
 exec_script "$@"

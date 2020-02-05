@@ -13,8 +13,8 @@ from .deblike import deblike
 class Debian(object):
 
     @staticmethod
-    def gen_preseed_conf(values, write=False, dst_path=None):
-        cfg_dst = Debian.gen_preseed('debian', values, write, dst_path)
+    def gen_preseed_conf(values, ver_code=None):
+        cfg_dst = Debian.gen_preseed2('debian', values, ver_code)
         return cfg_dst
 
     @staticmethod

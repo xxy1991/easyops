@@ -51,9 +51,9 @@ class Config(object):
         return self.__hosts
 
     @property
-    def context(self):
+    def context(self) -> InvCtx:
         return self.__context
 
     @property
-    def config(self):
+    def config(self) -> InvCfg:
         return self.context.config

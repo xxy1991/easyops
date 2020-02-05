@@ -19,7 +19,7 @@ class TestNetBoot(unittest.TestCase):
 
     def test_get_source(self) -> None:
         src_cfg = apt2.get_source(self.src_list)
-        self.assertEqual('ustc', src_cfg['name'])
+        self.assertEqual('aly', src_cfg['name'])
         src_cfg = apt2.get_source(self.src_list, name='none')
         self.assertTrue(src_cfg['default'])
         src_cfg = apt2.get_source(self.src_list, name='163')
@@ -31,5 +31,5 @@ class TestNetBoot(unittest.TestCase):
             return not ('scheme' in src and 'mirror' in src['scheme'])
 
         src_cfg = apt2.get_source(self.src_list, os='ubuntu', scheme=scheme)
-        self.assertEqual('ustc', src_cfg['name'])
+        self.assertEqual('aly', src_cfg['name'])
         self.assertTrue(scheme(src_cfg))

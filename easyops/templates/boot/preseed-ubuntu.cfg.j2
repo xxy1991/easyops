@@ -75,7 +75,7 @@ d-i apt-setup/security_host string {{ mirror }}
 tasksel tasksel/first multiselect openssh-server
 # for security, init script to set SSH-Key
 # openssh-server openssh-server/permit-root-login boolean false
-d-i pkgsel/include string curl python-pip
+d-i pkgsel/include string curl python3-pip
 
 # use script, no effect
 # grub-pc grub-pc/hidden_timeout boolean false

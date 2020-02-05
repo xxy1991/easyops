@@ -13,8 +13,8 @@ from .deblike import deblike
 class Ubuntu(object):
 
     @staticmethod
-    def gen_preseed_conf(values, write=False, dst_path=None):
-        cfg_dst = Ubuntu.gen_preseed('ubuntu', values, write, dst_path)
+    def gen_preseed_conf(values, ver_code=None):
+        cfg_dst = Ubuntu.gen_preseed2('ubuntu', values, ver_code)
         return cfg_dst
 
     @staticmethod

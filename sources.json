@@ -8,14 +8,14 @@
     {
       "name": "ustc",
       "location": "cn",
-      "location-default": true,
-      "host": "mirrors.ustc.edu.cn",
-      "default": true
+      "host": "mirrors.ustc.edu.cn"
     },
     {
       "name": "aly",
       "location": "cn",
-      "host": "mirrors.aliyun.com"
+      "location-default": true,
+      "host": "mirrors.aliyun.com",
+      "default": true
     },
     {
       "name": "aly-vpc",

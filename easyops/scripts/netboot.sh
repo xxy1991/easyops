@@ -15,15 +15,15 @@ netboot_download() {
     if [ ! -d ${BOOT_PATH} ]; then mkdir ${BOOT_PATH}; fi
     cd "${BOOT_PATH}" || exit
 
-    wget -Nq "${1}/${2}/dists/${3}/${BASE_URI}/${NETBOOTFILE}" && \
-    tar -zxf "${NETBOOTFILE}"
+    wget -Nq "${1}/${2}/dists/${3}/${BASE_URI}/${NETBOOTFILE}" &&
+        tar -zxf "${NETBOOTFILE}"
 }
 
-# netboot_grub()
+# netboot_grub(str cfg_path)
 netboot_grub() {
     grep 'New Install' "${GRUB40}" >&/dev/null
     if [ $? -eq 1 ]; then
-        cat "grub-msdos.cfg" >>"${GRUB40}"
+        cat "$1" >>"${GRUB40}"
     fi
     sed -i '/^GRUB_DEFAULT=/c\GRUB_DEFAULT="New Install"' "${DGRUB}"
     sed -i '/^GRUB_TIMEOUT=/c\GRUB_TIMEOUT=1' "${DGRUB}"
@@ -31,17 +31,14 @@ netboot_grub() {
     update-grub
 }
 
-# netboot_preseed(str os, str host)
+# netboot_preseed(str os, str cfg_path)
 netboot_preseed() {
-    wget -qO preseed.cfg "${CFG_URI}/boot/preseed-${2}.cfg"
+    cd "${BOOT_PATH}" || exit
+    cp "$2" ./preseed.cfg
     initrd_file="${1}-installer/amd64/initrd"
     gunzip "${initrd_file}.gz"
     echo preseed.cfg | cpio -H newc -o -A -F "${initrd_file}"
     gzip "${initrd_file}"
-}
-
-test() {
-    echo "abc"
 }
 
 "$@"

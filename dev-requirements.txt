@@ -5,3 +5,4 @@ jinja2
 
 autopep8
 pylint
+wheel
