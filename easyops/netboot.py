@@ -5,16 +5,18 @@
 @Author  : xxy1991
 @Email   : xxy1991@gmail.com
 """
-from os import path
 import argparse
 import json
+from os import path
+from typing import List
 
 import requests
 from invoke import run, Context
 
 from easyops import Config, SCRIPTS_PATH, Host
+from easyops.linux import Debian, Ubuntu
+from easyops.linux.apt2 import SourceConfigSet, SourceConfigItem
 from easyops.util import write_text
-from easyops.linux import Debian, Ubuntu, apt2
 
 CFG_URI = 'https://cfg.ori.fyi'
 
@@ -29,15 +31,23 @@ class Netboot(object):
 
         uri = CFG_URI + '/sources.json'
         json_text = requests.get(uri).text
-        self.src_list = json.loads(json_text)
+        self.__mirror_set = SourceConfigSet(json.loads(json_text))
 
     @property
     def config(self) -> Config:
         return self.__config
 
     @config.setter
-    def config(self, value) -> None:
+    def config(self, value: Config) -> None:
         self.__config = value
+
+    @property
+    def mirror_set(self) -> SourceConfigSet:
+        return self.__mirror_set
+
+    @mirror_set.setter
+    def mirror_set(self, value: SourceConfigSet) -> None:
+        self.__mirror_set = value
 
     @property
     def host(self) -> Host:
@@ -48,26 +58,19 @@ class Netboot(object):
         return self.config.context
 
     @property
-    def mirror(self) -> dict:
+    def mirror(self) -> SourceConfigItem:
         host = self.host
         if '.' in host.mirror:
-            return dict(host=host.mirror)
+            return SourceConfigItem(self.os, dict(host=host.mirror))
         else:
-            def scheme(src):
-                return not ('scheme' in src and 'mirror' in src['scheme'])
+            def scheme(schemes: List[str]):
+                return 'mirror' not in schemes
 
-            return apt2.get_source(self.src_list, name=host.mirror, os=self.os, scheme=scheme)
-
-    @property
-    def mirror_scheme(self) -> []:
-        if 'scheme' not in self.mirror:
-            return ['http']
-        else:
-            return self.mirror['scheme']
+            return self.mirror_set.get_mirror(os=self.os, name=host.mirror, scheme=scheme)
 
     @property
     def mirror_uri(self) -> str:
-        return self.mirror_scheme[0] + '://' + self.mirror['host']
+        return self.mirror.scheme[0] + '://' + self.mirror.host
 
     def get_config(self):
         if self.__host is not None and self.__host in self.config.hosts:
@@ -94,7 +97,7 @@ class Netboot(object):
             write_text(grub_cfg, file_path)
             run(' '.join([self.script_path, 'netboot_grub', file_path]))
 
-    def gen_preseed(self):
+    def get_preseed_cfg(self):
         host = self.get_config()
         proxy = host.proxy
         if proxy is None:
@@ -105,7 +108,7 @@ class Netboot(object):
             username=host.username, fullname=host.fullname,
             user_password=host.users[host.username]['password'],
             proxy=proxy,
-            mirror=self.mirror['host'],
+            mirror=self.mirror.host,
             gui=host.gui,
         )
         preseed_cfg = None
@@ -113,6 +116,10 @@ class Netboot(object):
             preseed_cfg = Debian.gen_preseed_conf(values)
         elif self.os == 'ubuntu':
             preseed_cfg = Ubuntu.gen_preseed_conf(values)
+        return preseed_cfg
+
+    def gen_preseed(self):
+        preseed_cfg = self.get_preseed_cfg()
         if preseed_cfg is not None:
             file_path = path.abspath('pressed.cfg')
             write_text(preseed_cfg, file_path)
@@ -135,4 +142,5 @@ if __name__ == "__main__":
     netboot = Netboot(options.os, options.H)
     netboot.download()
     netboot.update_grub()
-    netboot.gen_preseed()
+    if not options.manual:
+        netboot.gen_preseed()

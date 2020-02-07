@@ -5,16 +5,21 @@
 @Author  : xxy1991
 @Email   : xxy1991@gmail.com
 """
-
+import json
 import unittest
 
 from easyops import Config
 from easyops.linux import Ubuntu
+from easyops.linux.apt2 import SourceConfigSet
 
 
 class TestUbuntu(unittest.TestCase):
     def setUp(self) -> None:
         self.config = Config(path='tests/invoke.yml')
+        self.invoke = self.config.context
+
+        with open('./sources.json', 'r') as f:
+            self.mirror_set = SourceConfigSet(json.load(f))
 
     def test_gen_grub(self) -> None:
         config = Ubuntu.gen_grub()

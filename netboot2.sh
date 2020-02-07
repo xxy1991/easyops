@@ -2,6 +2,7 @@
 # created by xxy1991
 
 CFG_URI='https://cfg.ori.fyi'
+PIP_MIRROR='https://mirrors.aliyun.com/pypi/simple'
 
 # check_py3()
 check_py3() {
@@ -14,7 +15,7 @@ check_py3() {
     if ! [[ $PIP_VER == 9* ]]; then
         apt install -yqq python3-pip
     fi
-    pip3 -q install requests invoke jinja2
+    pip3 install -q -i "$PIP_MIRROR" requests invoke jinja2
 }
 
 # exec_script(str agrs)

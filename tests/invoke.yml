@@ -23,6 +23,20 @@ Hosts:
   ubuntu:
     os: ubuntu
     host: ubstd
+  test1:
+    os: debian
+    mirror: xtom
+    host: test1
+  test2:
+    os: ubuntu
+    mirror: aly-vpc
+    host: test2
+    username: test2
+    fullname: Test2
+    users:
+      test2:
+        key: test_rsa_2048
+        password: Test223!
   hk01:
     os: debian
     mirror: xtom

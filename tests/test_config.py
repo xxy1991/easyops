@@ -8,7 +8,7 @@
 
 import unittest
 
-from easyops import Config, Host
+from easyops import Config
 
 
 class TestConfig(unittest.TestCase):

@@ -77,7 +77,7 @@ tasksel tasksel/first multiselect ssh-server
 # for security, init script to set SSH-Key
 # openssh-server openssh-server/permit-root-login boolean false
 d-i pkgsel/include string bash-completion irqbalance sudo \
-ca-certificates curl lsb-release python-pip
+ca-certificates curl lsb-release python3-pip
 
 grub-pc grub-pc/timeout string 3
 d-i grub-installer/bootdev string default
