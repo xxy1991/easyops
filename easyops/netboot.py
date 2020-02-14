@@ -18,7 +18,7 @@ from easyops.linux import Debian, Ubuntu
 from easyops.linux.apt2 import SourceConfigSet, SourceConfigItem
 from easyops.util import write_text
 
-CFG_URI = 'https://cfg.ori.fyi'
+CFG_URI = 'https://develop.xxy.fyi'
 
 
 class Netboot(object):
@@ -81,7 +81,7 @@ class Netboot(object):
     def download(self, ver_code=None):
         if ver_code is None:
             if self.os == 'debian':
-                ver_code = Debian.VERSIONS[9]
+                ver_code = Debian.VERSIONS[10]
             elif self.os == 'ubuntu':
                 ver_code = Ubuntu.VERSIONS[18]
         run(' '.join([self.script_path, 'netboot_download', self.mirror_uri, self.os, ver_code]))
@@ -128,9 +128,10 @@ class Netboot(object):
 
 def get_args(args=None):
     parser = argparse.ArgumentParser(description='Linux netboot installer.')
-    parser.add_argument('os', choices=['debian', 'ubuntu'], help='os name that install')
+    parser.add_argument('os', choices=['debian', 'ubuntu'], help="the distribution's name")
+    parser.add_argument('-V', help="the distribution's major version")
     parser.add_argument('-H', help='Hostname')
-    parser.add_argument('-m', '--manual', action="store_true", help='manual mode')
+    parser.add_argument('-M', '--manual', action="store_true", help='manual mode')
 
     if args is not None:
         return parser.parse_args(args)
