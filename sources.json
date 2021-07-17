@@ -1,0 +1,55 @@
+{
+  "common": [
+    {
+      "name": "163",
+      "location": "cn",
+      "host": "mirrors.163.com"
+    },
+    {
+      "name": "ustc",
+      "location": "cn",
+      "host": "mirrors.ustc.edu.cn"
+    },
+    {
+      "name": "aly",
+      "location": "cn",
+      "location-default": true,
+      "host": "mirrors.aliyun.com",
+      "default": true
+    },
+    {
+      "name": "aly-vpc",
+      "location": "sp",
+      "host": "mirrors.cloud.aliyuncs.com"
+    },
+    {
+      "name": "xtom",
+      "location": "hk",
+      "location-default": true,
+      "host": "mirror.xtom.com.hk"
+    },
+    {
+      "name": "sggs",
+      "location": "sg",
+      "location-default": true,
+      "host": "mirror.sg.gs"
+    }
+  ],
+  "debian": [
+    {
+      "name": "auto",
+      "host": "deb.debian.org",
+      "default": true
+    }
+  ],
+  "ubuntu": [
+    {
+      "name": "auto",
+      "scheme": [
+        "mirror"
+      ],
+      "host": "mirrors.ubuntu.com/mirrors.txt",
+      "default": true
+    }
+  ]
+}

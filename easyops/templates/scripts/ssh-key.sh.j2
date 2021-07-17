@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# created by xxy1991
+
+mkdir -p /target/root/.ssh; \
+wget "{{ root_key }}" \
+-qO "/target/root/.ssh/authorized_keys"; \
+mkdir -p /target/home/{{ username }}/.ssh; \
+wget "{{ user_key }}" \
+-qO "/target/home/{{ username }}/.ssh/authorized_keys"; \
+in-target usermod -a -G sudo {{ username }}; \
